@@ -13,10 +13,10 @@ namespace ConsoleUI
 
             foreach (var car in carManager.GetCarDetails())
             {
-                Console.WriteLine("{0} - {1} - {2}",car.CarName,car.BrandName,car.ColorName);
+                Console.WriteLine("{0} - {1} - {2} - {3}", car.CarName, car.BrandName, car.ColorName, car.DailyPrice);
             }
 
-            
+
         }
     }
 }
