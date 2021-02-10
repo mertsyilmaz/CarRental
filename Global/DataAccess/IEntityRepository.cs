@@ -1,10 +1,10 @@
-﻿using Entities.Abstract;
+﻿using Global.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace DataAccess.Abstract
+namespace Global.DataAccess
 {
     public interface IEntityRepository<T> where T: class,IEntity,new()
     {
