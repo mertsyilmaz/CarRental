@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Entities.DTOs;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Business.Abstract
         IResult ReturnCar(Rental rental);
         IDataResult<List<Rental>> GetAll();
         IDataResult<Rental> GetById(int rentalId);
+        IDataResult<List<RentalDetailDto>> GetCarDetails();
 
     }
 }

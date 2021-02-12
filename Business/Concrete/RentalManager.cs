@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,11 @@ namespace Business.Concrete
                 return new ErrorResult("Araç teslim etme işlemi yapılamaz.");
             }
             
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
         }
     }
 }
