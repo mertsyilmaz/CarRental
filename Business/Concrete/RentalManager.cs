@@ -17,10 +17,16 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        public IResult Add(Rental rental)
+        public IResult RentCar(Rental rental)
         {
+            var existRental = _rentalDal.Get(r => r.CarId == rental.CarId && r.ReturnDate == null);
+            if (existRental != null)
+            {
+                return new ErrorResult("Bu araç kiralanamaz.");
+            }
+
             _rentalDal.Add(rental);
-            return new SuccessResult();
+            return new SuccessResult("Kiralama işlemi başarılı.");
         }
 
         public IResult Delete(Rental rental)
@@ -39,20 +45,19 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == rentalId));
         }
 
-        public IDataResult<List<Rental>> GetRentalsBetweenDate(DateTime rentDate, DateTime returnDate)
+        public IResult ReturnCar(Rental rental)
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.RentDate >= rentDate && r.ReturnDate <= returnDate));
-        }
-
-        public IDataResult<List<Rental>> GetRentalsByRentDate(DateTime rentDate)
-        {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.RentDate == rentDate));
-        }
-
-        public IResult Update(Rental rental)
-        {
-            _rentalDal.Update(rental);
-            return new SuccessResult();
+            var existRent = _rentalDal.Get(r => r.Id == rental.Id && r.ReturnDate == null);
+            if (existRent != null)
+            {
+                _rentalDal.Update(rental);
+                return new SuccessResult("Araç teslim edildi.");
+            }
+            else
+            {
+                return new ErrorResult("Araç teslim etme işlemi yapılamaz.");
+            }
+            
         }
     }
 }
