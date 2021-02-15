@@ -20,7 +20,7 @@ namespace Business.Concrete
 
         public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0 && car.Name.Length <=2)
+            if (car.DailyPrice > 0 && car.Name.Length >=2)
             {
                 _carDal.Add(car);
                 return new SuccessResult();
@@ -37,6 +37,11 @@ namespace Business.Concrete
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll());
+        }
+
+        public IDataResult<Car> GetById(int CarId)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == CarId));
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
