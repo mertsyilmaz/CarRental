@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Global.Utilities.Results;
@@ -18,12 +19,20 @@ namespace Business.Concrete
         }
         public IResult Add(User user)
         {
+            if (_userDal.Get(u => u.Email == user.Email) != null)
+            {
+                return new ErrorResult(Messages.UserAlreadyExists);
+            }
             _userDal.Add(user);
             return new SuccessResult();
         }
 
         public IResult Delete(User user)
         {
+            if (!_userDal.Exists(u => u.Id == user.Id))
+            {
+                return new ErrorResult(Messages.UserNotFound);
+            }
             _userDal.Delete(user);
             return new SuccessResult();
         }
@@ -35,11 +44,19 @@ namespace Business.Concrete
 
         public IDataResult<User> GetById(int userId)
         {
+            if (!_userDal.Exists(u => u.Id == userId))
+            {
+                return new ErrorDataResult<User>(Messages.UserNotFound);
+            }
             return new SuccessDataResult<User>(_userDal.Get(u => u.Id == userId));
         }
 
         public IResult Update(User user)
         {
+            if (!_userDal.Exists(u => u.Id == user.Id))
+            {
+                return new ErrorResult(Messages.UserNotFound);
+            }
             _userDal.Delete(user);
             return new SuccessResult();
         }

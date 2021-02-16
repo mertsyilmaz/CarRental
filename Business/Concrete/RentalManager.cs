@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -32,6 +33,10 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
+            if (!_rentalDal.Exists(r => r.Id == rental.Id))
+            {
+                return new ErrorResult(Messages.RentalNotFound);
+            }
             _rentalDal.Delete(rental);
             return new SuccessResult();
         }
@@ -43,6 +48,10 @@ namespace Business.Concrete
 
         public IDataResult<Rental> GetById(int rentalId)
         {
+            if (!_rentalDal.Exists(r => r.Id == rentalId))
+            {
+                return new ErrorDataResult<Rental>(Messages.RentalNotFound);
+            }
             return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == rentalId));
         }
 
