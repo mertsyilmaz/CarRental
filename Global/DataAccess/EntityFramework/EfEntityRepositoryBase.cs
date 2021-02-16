@@ -32,6 +32,14 @@ namespace Global.DataAccess.EntityFramework
             }
         }
 
+        public bool Exists(Expression<Func<TEntity, bool>> filter)
+        {
+            using (TContext contex = new TContext())
+            {
+               return contex.Set<TEntity>().Any<TEntity>(filter);
+            }
+        }
+
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext contex = new TContext())

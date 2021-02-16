@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Global.Utilities.Results;
@@ -19,12 +20,20 @@ namespace Business.Concrete
 
         public IResult Add(Brand brand)
         {
+            if (_brandDal.Get(b => b.Name == brand.Name) != null)
+            {
+                return new ErrorResult(Messages.BrandAlreadyExists);
+            }
             _brandDal.Add(brand);
             return new SuccessResult();
         }
 
         public IResult Delete(Brand brand)
         {
+            if (!Exists(brand.Id))
+            {
+                return new ErrorResult(Messages.BrandNotFound);
+            }
             _brandDal.Delete(brand);
             return new SuccessResult();
         }
@@ -36,13 +45,26 @@ namespace Business.Concrete
 
         public IDataResult<Brand> GetById(int brandId)
         {
+            if (!Exists(brandId))
+            {
+                return new ErrorDataResult<Brand>(Messages.BrandNotFound);
+            }
             return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId));
         }
 
         public IResult Update(Brand brand)
         {
+            if (!Exists(brand.Id))
+            {
+                return new ErrorDataResult<Brand>(Messages.BrandNotFound);
+            }
             _brandDal.Update(brand);
             return new SuccessResult();
+        }
+
+        private bool Exists(int id)
+        {
+            return _brandDal.Exists(b => b.Id == id);
         }
     }
 }
