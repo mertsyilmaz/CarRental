@@ -25,7 +25,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ColorAlreadyExists);
             }
             _colorDal.Add(color);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ColorAdded);
         }
 
         public IResult Delete(Color color)
@@ -35,12 +35,12 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ColorNotFound);
             }
             _colorDal.Delete(color);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(),Messages.ColorListed);
         }
 
         public IDataResult<Color> GetById(int colorId)
@@ -49,7 +49,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<Color>(Messages.ColorNotFound);
             }
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.Id == colorId));
+            return new SuccessDataResult<Color>(_colorDal.Get(c => c.Id == colorId), Messages.ColorListed);
         }
 
         public IResult Update(Color color)
@@ -59,7 +59,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ColorNotFound);
             }
             _colorDal.Update(color);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ColorUpdated);
         }
 
         private bool Exists(int id)

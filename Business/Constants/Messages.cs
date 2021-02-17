@@ -54,5 +54,8 @@ namespace Business.Constants
         public static string RentalListed = "Rental listed successfully.";
         public static string RentalAlreadyExists = "This rental already exists.";
         public static string RentalNotFound = "This rental was not found.";
+        public static string CarNotRent = "This car is not suitable for rent.";
+        public static string CarRented = "Car is successfully rented.";
+        public static string CarReturned = "Car is successfully returned.";
     }
 }

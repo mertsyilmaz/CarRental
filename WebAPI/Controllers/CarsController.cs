@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
             var result = _carManager.GetAll();
             if (result.Success)
             {
-                Ok(result);
+                return Ok(result);
             }
             return BadRequest(result);
         }

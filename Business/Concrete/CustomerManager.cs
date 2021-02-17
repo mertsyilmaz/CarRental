@@ -25,46 +25,50 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CustomerAlreadyExists);
             }
             _customerDal.Add(customer);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CustomerAdded);
         }
 
         public IResult Delete(Customer customer)
         {
-            if (!_customerDal.Exists(c => c.Id == customer.Id))
+            if (!Exists(customer.Id))
             {
                 return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
             }
             _customerDal.Delete(customer);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CustomerDeleted);
         }
 
         public IDataResult<List<Customer>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(),Messages.CustomerListed);
         }
 
         public IDataResult<Customer> GetById(int customerId)
         {
-            if (!_customerDal.Exists(c => c.Id == customerId))
+            if (!Exists(customerId))
             {
                 return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
             }
-            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == customerId));
+            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == customerId),Messages.CustomerListed);
         }
 
         public IDataResult<List<Customer>> GetCustemersByUserId(int userId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == userId));
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == userId),Messages.CustomerListed);
         }
 
         public IResult Update(Customer customer)
         {
-            if (!_customerDal.Exists(c => c.Id == customer.Id))
+            if (!Exists(customer.Id))
             {
                 return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
             }
             _customerDal.Update(customer);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CustomerUpdated);
+        }
+        private bool Exists(int id)
+        {
+            return _customerDal.Exists(c => c.Id == id);
         }
     }
 }

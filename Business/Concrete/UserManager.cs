@@ -24,41 +24,45 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.UserAlreadyExists);
             }
             _userDal.Add(user);
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserAdded);
         }
 
         public IResult Delete(User user)
         {
-            if (!_userDal.Exists(u => u.Id == user.Id))
+            if (!Exists(user.Id))
             {
                 return new ErrorResult(Messages.UserNotFound);
             }
             _userDal.Delete(user);
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserDeleted);
         }
 
         public IDataResult<List<User>> GetAll()
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll());
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(),Messages.UserListed);
         }
 
         public IDataResult<User> GetById(int userId)
         {
-            if (!_userDal.Exists(u => u.Id == userId))
+            if (!Exists(userId))
             {
                 return new ErrorDataResult<User>(Messages.UserNotFound);
             }
-            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == userId));
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == userId),Messages.UserListed);
         }
 
         public IResult Update(User user)
         {
-            if (!_userDal.Exists(u => u.Id == user.Id))
+            if (!Exists( user.Id))
             {
                 return new ErrorResult(Messages.UserNotFound);
             }
             _userDal.Delete(user);
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserUpdated);
+        }
+        private bool  Exists(int id)
+        {
+            return _userDal.Exists(u => u.Id == id);
         }
     }
 }

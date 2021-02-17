@@ -24,35 +24,36 @@ namespace Business.Concrete
             var existRental = _rentalDal.Get(r => r.CarId == rental.CarId && r.ReturnDate == null);
             if (existRental != null)
             {
-                return new ErrorResult("Bu araç kiralanamaz.");
+                return new ErrorResult(Messages.CarNotRent);
             }
 
             _rentalDal.Add(rental);
-            return new SuccessResult("Kiralama işlemi başarılı.");
+            return new SuccessResult(Messages.CarRented);
         }
 
         public IResult Delete(Rental rental)
         {
-            if (!_rentalDal.Exists(r => r.Id == rental.Id))
+            if (!Exists(rental.Id))
             {
                 return new ErrorResult(Messages.RentalNotFound);
             }
+
             _rentalDal.Delete(rental);
-            return new SuccessResult();
+            return new SuccessResult(Messages.RentalDeleted);
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(),Messages.RentalListed);
         }
 
         public IDataResult<Rental> GetById(int rentalId)
         {
-            if (!_rentalDal.Exists(r => r.Id == rentalId))
+            if (!Exists(rentalId))
             {
                 return new ErrorDataResult<Rental>(Messages.RentalNotFound);
             }
-            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == rentalId));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == rentalId),Messages.RentalListed);
         }
 
         public IResult ReturnCar(Rental rental)
@@ -61,18 +62,23 @@ namespace Business.Concrete
             if (existRent != null)
             {
                 _rentalDal.Update(rental);
-                return new SuccessResult("Araç teslim edildi.");
+                return new SuccessResult(Messages.CarReturned);
             }
             else
             {
-                return new ErrorResult("Araç teslim etme işlemi yapılamaz.");
+                return new ErrorResult(Messages.RentalNotFound);
             }
             
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
-            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(),Messages.RentalListed);
+        }
+
+        private bool Exists(int id)
+        {
+            return _rentalDal.Exists(r => r.Id == id);
         }
     }
 }

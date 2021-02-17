@@ -29,7 +29,7 @@ namespace Business.Concrete
             if (car.DailyPrice > 0 && car.Name.Length >=2)
             {
                 _carDal.Add(car);
-                return new SuccessResult();
+                return new SuccessResult(Messages.CarAdded);
             }
 
             return new ErrorResult();
@@ -43,12 +43,12 @@ namespace Business.Concrete
             }
 
             _carDal.Delete(car);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CarDeleted);
         }
 
         public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.CarListed);
         }
 
         public IDataResult<Car> GetById(int CarId)
@@ -58,22 +58,22 @@ namespace Business.Concrete
                 return new ErrorDataResult<Car>(Messages.CarNotFound);
             }
 
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == CarId));
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == CarId),Messages.CarListed);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(),Messages.CarListed);
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId));
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId),Messages.CarListed);
         }
 
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId),Messages.CarListed);
         }
 
         public IResult Update(Car car)
@@ -83,7 +83,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<Car>(Messages.CarNotFound);
             }
             _carDal.Update(car);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CarUpdated);
         }
 
         private bool Exists(int id)

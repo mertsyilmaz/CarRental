@@ -25,7 +25,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.BrandAlreadyExists);
             }
             _brandDal.Add(brand);
-            return new SuccessResult();
+            return new SuccessResult(Messages.BrandAdded);
         }
 
         public IResult Delete(Brand brand)
@@ -35,12 +35,12 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.BrandNotFound);
             }
             _brandDal.Delete(brand);
-            return new SuccessResult();
+            return new SuccessResult(Messages.BrandDeleted);
         }
 
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.BrandListed);
         }
 
         public IDataResult<Brand> GetById(int brandId)
@@ -49,7 +49,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<Brand>(Messages.BrandNotFound);
             }
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId));
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId),Messages.BrandListed);
         }
 
         public IResult Update(Brand brand)
@@ -59,7 +59,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<Brand>(Messages.BrandNotFound);
             }
             _brandDal.Update(brand);
-            return new SuccessResult();
+            return new SuccessResult(Messages.BrandUpdated);
         }
 
         private bool Exists(int id)
