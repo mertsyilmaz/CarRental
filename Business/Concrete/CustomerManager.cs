@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Global.Aspects.Autofac;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -18,12 +20,14 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
             if (_customerDal.Get(c => c.CompanyName == customer.CompanyName) != null)
             {
                 return new ErrorResult(Messages.CustomerAlreadyExists);
             }
+
             _customerDal.Add(customer);
             return new SuccessResult(Messages.CustomerAdded);
         }
@@ -57,6 +61,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == userId),Messages.CustomerListed);
         }
 
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Update(Customer customer)
         {
             if (!Exists(customer.Id))

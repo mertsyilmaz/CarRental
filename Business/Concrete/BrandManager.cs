@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Global.Aspects.Autofac;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -18,12 +20,14 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
             if (_brandDal.Get(b => b.Name == brand.Name) != null)
             {
                 return new ErrorResult(Messages.BrandAlreadyExists);
             }
+
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
         }
@@ -52,6 +56,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId),Messages.BrandListed);
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand brand)
         {
             if (!Exists(brand.Id))

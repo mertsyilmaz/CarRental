@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Global.Aspects.Autofac;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult RentCar(Rental rental)
         {
             var existRental = _rentalDal.Get(r => r.CarId == rental.CarId && r.ReturnDate == null);

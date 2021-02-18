@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Global.Aspects.Autofac;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -17,12 +19,15 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
+
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
             if (_userDal.Get(u => u.Email == user.Email) != null)
             {
                 return new ErrorResult(Messages.UserAlreadyExists);
             }
+
             _userDal.Add(user);
             return new SuccessResult(Messages.UserAdded);
         }
@@ -51,6 +56,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_userDal.Get(u => u.Id == userId),Messages.UserListed);
         }
 
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(User user)
         {
             if (!Exists( user.Id))
