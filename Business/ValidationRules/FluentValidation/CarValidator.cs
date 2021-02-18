@@ -10,9 +10,13 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CarValidator()
         {
-            RuleFor(c => c.Name).MinimumLength(2).WithMessage("Car name must be at least 2 characters!");
-            RuleFor(c => c.Name).NotEmpty().WithMessage("Car name can not be empty!");
-            RuleFor(c=> c.DailyPrice).GreaterThan(0).WithMessage("Daily price must be greater than 0!");
+            RuleFor(c => c.Name)
+                .MinimumLength(2).WithMessage("Car name must be at least 2 characters!")
+                .NotEmpty().WithMessage("Car name can not be empty!");
+
+            RuleFor(c=> c.DailyPrice)
+                .NotEmpty().WithMessage("Daily price can not be empty!")
+                .GreaterThan(0).WithMessage("Daily price must be greater than 0!");
         }
     }
 }
