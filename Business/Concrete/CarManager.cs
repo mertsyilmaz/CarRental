@@ -5,6 +5,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using FluentValidation;
+using Global.Aspects.Autofac;
 using Global.CrossCuttingConcerns.Validation.FluentValidation;
 using Global.Utilities.Results;
 using System;
@@ -22,10 +23,9 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            ValidationTool.Validate(new CarValidator(), car);
-
             if (_carDal.Get(b => b.Name == car.Name) != null)
             {
                 return new ErrorResult(Messages.CarAlreadyExists);
