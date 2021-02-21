@@ -76,6 +76,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId), Messages.CarListed);
         }
 
+        public IDataResult<List<CarsWithPhotosDto>> GetCarsWithPhotos()
+        {
+            return new SuccessDataResult<List<CarsWithPhotosDto>>(_carDal.GetCarsWithPhotos(), Messages.CarListed);
+        }
+
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {

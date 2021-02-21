@@ -16,11 +16,11 @@ namespace DataAccess.Concrete.InMemory
         {
             _cars = new List<Car>
             {
-                new Car{Id=1,BrandId=1,ColorId=1,ModelYear=DateTime.Now,DailyPrice=12.50M,Description="Description 1"},
-                new Car{Id=2,BrandId=1,ColorId=1,ModelYear=DateTime.Now,DailyPrice=14.70M,Description="Description 2"},
-                new Car{Id=3,BrandId=2,ColorId=1,ModelYear=DateTime.Now,DailyPrice=18.50M,Description="Description 3"},
-                new Car{Id=4,BrandId=2,ColorId=2,ModelYear=DateTime.Now,DailyPrice=12.50M,Description="Description 4"},
-                new Car{Id=5,BrandId=3,ColorId=2,ModelYear=DateTime.Now,DailyPrice=9.50M,Description="Description 5"},
+                new Car{Id=1,BrandId=1,ColorId=1,ModelYear=DateTime.Now.Year.ToString(),DailyPrice=12.50M,Description="Description 1"},
+                new Car{Id=2,BrandId=1,ColorId=1,ModelYear=DateTime.Now.Year.ToString(),DailyPrice=14.70M,Description="Description 2"},
+                new Car{Id=3,BrandId=2,ColorId=1,ModelYear=DateTime.Now.Year.ToString(),DailyPrice=18.50M,Description="Description 3"},
+                new Car{Id=4,BrandId=2,ColorId=2,ModelYear=DateTime.Now.Year.ToString(),DailyPrice=12.50M,Description="Description 4"},
+                new Car{Id=5,BrandId=3,ColorId=2,ModelYear=DateTime.Now.Year.ToString(),DailyPrice=9.50M,Description="Description 5"},
             };
         }
 
@@ -66,6 +66,11 @@ namespace DataAccess.Concrete.InMemory
         }
 
         public List<Car> GetCarsByColorId(int colorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarsWithPhotosDto> GetCarsWithPhotos()
         {
             throw new NotImplementedException();
         }

@@ -28,7 +28,33 @@ namespace DataAccess.Concrete.EntityFramework
                                  BrandName = br.Name,
                                  CarName = cr.Name,
                                  ColorName = cl.Name,
-                                 DailyPrice = cr.DailyPrice
+                                 DailyPrice = cr.DailyPrice,
+                                 Description = cr.Description,
+                                 ModelYear = cr.ModelYear
+                             };
+                return result.ToList();
+            }
+        }
+
+        public List<CarsWithPhotosDto> GetCarsWithPhotos()
+        {
+            using (CarRentalContext context = new CarRentalContext())
+            {
+                var result = from cr in context.Cars
+                             join cl in context.Colors
+                             on cr.ColorId equals cl.Id
+                             join br in context.Brands
+                             on cr.BrandId equals br.Id
+                             select new CarsWithPhotosDto
+                             {
+                                 CarId = cr.Id,
+                                 BrandName = br.Name,
+                                 CarName = cr.Name,
+                                 ColorName = cl.Name,
+                                 DailyPrice = cr.DailyPrice,
+                                 Description = cr.Description,
+                                 ModelYear = cr.ModelYear,
+                                 Photos = context.Photos.Where(p => p.CarId == cr.Id).ToList()
                              };
                 return result.ToList();
             }

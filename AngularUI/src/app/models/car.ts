@@ -3,7 +3,7 @@ export class Car {
   name: string;
   brandId: number;
   colorId: number;
-  modelYear: Date;
+  modelYear: string;
   dailyPrice: number;
   description: string;
 }
