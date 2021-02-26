@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Global/Utilities/Image/Cloudinary/settings.json
+/Global/appsettings.json
