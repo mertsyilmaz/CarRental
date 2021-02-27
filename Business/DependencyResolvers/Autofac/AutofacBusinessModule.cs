@@ -14,8 +14,11 @@ namespace Business.DependencyResolvers.Autofac
 {
     public class AutofacBusinessModule : Module
     {
+
         protected override void Load(ContainerBuilder builder)
         {
+            
+
             builder.RegisterType<CarManager>().As<ICarManager>().SingleInstance();
             builder.RegisterType<EfCarDal>().As<ICarDal>().SingleInstance();
 
@@ -33,6 +36,12 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<UserManager>().As<IUserManager>().SingleInstance();
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
+
+            builder.RegisterType<PhotoManager>().As<IPhotoManager>().SingleInstance();
+            builder.RegisterType<EfPhotoDal>().As<IPhotoDal>().SingleInstance();
+
+
+
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -8,6 +8,7 @@ using FluentValidation;
 using Global.Aspects.Autofac;
 using Global.CrossCuttingConcerns.Validation.FluentValidation;
 using Global.Utilities.Results;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;

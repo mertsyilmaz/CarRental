@@ -57,5 +57,12 @@ namespace Business.Constants
         public static string CarNotRent = "This car is not suitable for rent.";
         public static string CarRented = "Car is successfully rented.";
         public static string CarReturned = "Car is successfully returned.";
+
+        // Photo messages
+        public static string PhotoAdded = "Photo added successfully.";
+        public static string PhotoUpdated = "Photo updated successfully.";
+        public static string PhotoDeleted = "Photo deleted successfully.";
+        public static string PhotoListed = "Photo listed successfully.";
+
     }
 }
