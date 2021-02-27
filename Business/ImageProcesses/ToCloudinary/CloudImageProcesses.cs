@@ -44,10 +44,7 @@ namespace Business.ImageProcesses.ToCloudinary
 
         public static void DeleteImage(Photo photo)
         {
-            Account account = new Account(
-                        "dvcjsgdbk",
-                        "593453144485288",
-                        "beOT8JH5DFewF7Xox3oitNRgtJg");
+            Account account = new Account(CloudinarySettings.CloudName, CloudinarySettings.ApiKey, CloudinarySettings.ApiSecret);
 
             Cloudinary cloudinary = new Cloudinary(account);
 
@@ -60,10 +57,7 @@ namespace Business.ImageProcesses.ToCloudinary
 
         public static UploadPhotoDto UpdateImage(UploadPhotoDto uploadPhotoDto,Photo photo)
         {
-            Account account = new Account(
-                        "dvcjsgdbk",
-                        "593453144485288",
-                        "beOT8JH5DFewF7Xox3oitNRgtJg");
+            Account account = new Account(CloudinarySettings.CloudName, CloudinarySettings.ApiKey, CloudinarySettings.ApiSecret);
 
             Cloudinary cloudinary = new Cloudinary(account);
 
