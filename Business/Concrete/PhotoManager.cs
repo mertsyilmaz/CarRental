@@ -62,7 +62,15 @@ namespace Business.Concrete
 
         public IDataResult<List<Photo>> GetAllByCarId(int carId)
         {
-            return new SuccessDataResult<List<Photo>>(_photoDal.GetAll(x => x.CarId == carId), Messages.PhotoListed);
+            var resultData = _photoDal.GetAll(x => x.CarId == carId);
+            if(resultData.Count == 0)
+            {
+                return GetDefaultPhoto();
+            }
+            else
+            {
+                return new SuccessDataResult<List<Photo>>(resultData, Messages.PhotoListed);
+            }
         }
 
         public IResult Update(int photoId, UploadPhotoDto uploadPhotoDto)
@@ -99,6 +107,13 @@ namespace Business.Concrete
                 return new SuccessResult();
             }
             return new ErrorResult(Messages.PhotoNotFound);
+        }
+
+        private IDataResult<List<Photo>> GetDefaultPhoto()
+        {
+            List<Photo> photos = new List<Photo>();
+            photos.Add(CloudImageProcesses.GetDefaultPhoto());
+            return new SuccessDataResult<List<Photo>>(photos,Messages.PhotoListed);
         }
     }
 }

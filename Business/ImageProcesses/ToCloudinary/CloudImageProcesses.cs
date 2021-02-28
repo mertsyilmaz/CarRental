@@ -83,5 +83,14 @@ namespace Business.ImageProcesses.ToCloudinary
 
             return uploadPhotoDto;
         }
+
+        public static Photo GetDefaultPhoto()
+        {
+            return new Photo
+            {
+                Url = "https://res.cloudinary.com/dvcjsgdbk/image/upload/v1614499978/default_mfm3ge.jpg",
+                PublicId = "default_mfm3ge"
+            };
+        }
     }
 }

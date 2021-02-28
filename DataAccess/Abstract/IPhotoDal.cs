@@ -12,5 +12,6 @@ namespace DataAccess.Abstract
         void AddUploadPhotoDto(UploadPhotoDto uploadPhotoDto);
 
         void UpdateUploadPhotoDto(UploadPhotoDto uploadPhotoDto, Photo photo);
+
     }
 }
