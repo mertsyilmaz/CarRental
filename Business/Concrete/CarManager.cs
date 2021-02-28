@@ -7,6 +7,7 @@ using Entities.DTOs;
 using FluentValidation;
 using Global.Aspects.Autofac;
 using Global.CrossCuttingConcerns.Validation.FluentValidation;
+using Global.Utilities.Business;
 using Global.Utilities.Results;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -27,9 +28,13 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (_carDal.Get(b => b.Name == car.Name) != null)
+            IResult result = BusinessRules.Run(
+                CarNameCheck(car.Name)
+                );
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.CarAlreadyExists);
+                return result;
             }
 
             _carDal.Add(car);
@@ -38,9 +43,13 @@ namespace Business.Concrete
 
         public IResult Delete(Car car)
         {
-            if (!Exists(car.Id))
+            IResult result = BusinessRules.Run(
+                CarExists(car.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.CarNotFound);
+                return result;
             }
 
             _carDal.Delete(car);
@@ -54,9 +63,13 @@ namespace Business.Concrete
 
         public IDataResult<Car> GetById(int CarId)
         {
-            if (!Exists(CarId))
+            IResult result = BusinessRules.Run(
+                CarExists(CarId)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Car>(Messages.CarNotFound);
+                return new ErrorDataResult<Car>(result.Message);
             }
 
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == CarId), Messages.CarListed);
@@ -85,17 +98,35 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            if (!Exists(car.Id))
+            IResult result = BusinessRules.Run(
+                CarExists(car.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Car>(Messages.CarNotFound);
+                return result;
             }
+
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
         }
 
-        private bool Exists(int id)
+        private IResult CarNameCheck(string carName)
         {
-            return _carDal.Exists(c => c.Id == id);
+            if (_carDal.Get(b => b.Name == carName) != null)
+            {
+                return new ErrorResult(Messages.CarAlreadyExists);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CarExists(int id)
+        {
+            if (_carDal.Exists(b => b.Id == id))
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.CarNotFound);
         }
     }
 }

@@ -63,6 +63,7 @@ namespace Business.Constants
         public static string PhotoUpdated = "Photo updated successfully.";
         public static string PhotoDeleted = "Photo deleted successfully.";
         public static string PhotoListed = "Photo listed successfully.";
-
+        public static string PhotoCountLimit = "Photo count must be a maximum of five.";
+        public static string PhotoNotFound = "This photo was not found.";
     }
 }

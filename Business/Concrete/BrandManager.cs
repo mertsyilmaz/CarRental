@@ -4,6 +4,7 @@ using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Global.Aspects.Autofac;
+using Global.Utilities.Business;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,13 @@ namespace Business.Concrete
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
-            if (_brandDal.Get(b => b.Name == brand.Name) != null)
+            IResult result = BusinessRules.Run(
+                BrandNameCheck(brand.Name)
+                );
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.BrandAlreadyExists);
+                return result;
             }
 
             _brandDal.Add(brand);
@@ -34,10 +39,15 @@ namespace Business.Concrete
 
         public IResult Delete(Brand brand)
         {
-            if (!Exists(brand.Id))
+            IResult result = BusinessRules.Run(
+                BrandExists(brand.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.BrandNotFound);
+                return result;
             }
+
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.BrandDeleted);
         }
@@ -49,9 +59,13 @@ namespace Business.Concrete
 
         public IDataResult<Brand> GetById(int brandId)
         {
-            if (!Exists(brandId))
+            IResult result = BusinessRules.Run(
+                BrandExists(brandId)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Brand>(Messages.BrandNotFound);
+                return new ErrorDataResult<Brand>(result.Message);
             }
             return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId),Messages.BrandListed);
         }
@@ -59,17 +73,35 @@ namespace Business.Concrete
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand brand)
         {
-            if (!Exists(brand.Id))
+            IResult result = BusinessRules.Run(
+                BrandExists(brand.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Brand>(Messages.BrandNotFound);
+                return result;
             }
+
             _brandDal.Update(brand);
             return new SuccessResult(Messages.BrandUpdated);
         }
 
-        private bool Exists(int id)
+        private IResult BrandNameCheck(string brandName)
         {
-            return _brandDal.Exists(b => b.Id == id);
+            if (_brandDal.Get(b => b.Name == brandName) != null)
+            {
+                return new ErrorResult(Messages.BrandAlreadyExists);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult BrandExists(int id)
+        {
+            if (_brandDal.Exists(b => b.Id == id))
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.BrandNotFound);
         }
     }
 }

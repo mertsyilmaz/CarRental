@@ -4,6 +4,7 @@ using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Global.Aspects.Autofac;
+using Global.Utilities.Business;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,13 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
-            if (_customerDal.Get(c => c.CompanyName == customer.CompanyName) != null)
+            IResult result = BusinessRules.Run(
+                CustomerCompanyNameCheck(customer.CompanyName)
+                );
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.CustomerAlreadyExists);
+                return result;
             }
 
             _customerDal.Add(customer);
@@ -34,9 +39,13 @@ namespace Business.Concrete
 
         public IResult Delete(Customer customer)
         {
-            if (!Exists(customer.Id))
+            IResult result = BusinessRules.Run(
+                CustomerExists(customer.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
+                return result;
             }
             _customerDal.Delete(customer);
             return new SuccessResult(Messages.CustomerDeleted);
@@ -49,9 +58,13 @@ namespace Business.Concrete
 
         public IDataResult<Customer> GetById(int customerId)
         {
-            if (!Exists(customerId))
+            IResult result = BusinessRules.Run(
+                CustomerExists(customerId)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
+                return new ErrorDataResult<Customer>(result.Message);
             }
             return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == customerId),Messages.CustomerListed);
         }
@@ -64,16 +77,33 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CustomerValidator))]
         public IResult Update(Customer customer)
         {
-            if (!Exists(customer.Id))
+            IResult result = BusinessRules.Run(
+                CustomerExists(customer.Id)
+                );
+
+            if (result != null)
             {
-                return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
+                return result;
             }
             _customerDal.Update(customer);
             return new SuccessResult(Messages.CustomerUpdated);
         }
-        private bool Exists(int id)
+        private IResult CustomerCompanyNameCheck(string companyName)
         {
-            return _customerDal.Exists(c => c.Id == id);
+            if (_customerDal.Get(b => b.CompanyName == companyName) != null)
+            {
+                return new ErrorResult(Messages.CustomerAlreadyExists);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CustomerExists(int id)
+        {
+            if (_customerDal.Exists(b => b.Id == id))
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.CustomerNotFound);
         }
     }
 }
