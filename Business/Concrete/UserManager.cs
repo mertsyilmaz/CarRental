@@ -1,9 +1,6 @@
 ﻿using Business.Abstract;
-using Business.Constants;
-using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
-using Entities.Concrete;
-using Global.Aspects.Autofac;
+using Global.Entities.Concrete;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -20,55 +17,20 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        [ValidationAspect(typeof(UserValidator))]
+        public IDataResult<List<OperationClaim>>  GetClaims(User user)
+        {
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
+        }
+
         public IResult Add(User user)
         {
-            if (_userDal.Get(u => u.Email == user.Email) != null)
-            {
-                return new ErrorResult(Messages.UserAlreadyExists);
-            }
-
             _userDal.Add(user);
-            return new SuccessResult(Messages.UserAdded);
+            return new SuccessResult("User added");
         }
 
-        public IResult Delete(User user)
+        public IDataResult<User> GetByMail(string email)
         {
-            if (!Exists(user.Id))
-            {
-                return new ErrorResult(Messages.UserNotFound);
-            }
-            _userDal.Delete(user);
-            return new SuccessResult(Messages.UserDeleted);
-        }
-
-        public IDataResult<List<User>> GetAll()
-        {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(),Messages.UserListed);
-        }
-
-        public IDataResult<User> GetById(int userId)
-        {
-            if (!Exists(userId))
-            {
-                return new ErrorDataResult<User>(Messages.UserNotFound);
-            }
-            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == userId),Messages.UserListed);
-        }
-
-        [ValidationAspect(typeof(UserValidator))]
-        public IResult Update(User user)
-        {
-            if (!Exists( user.Id))
-            {
-                return new ErrorResult(Messages.UserNotFound);
-            }
-            _userDal.Delete(user);
-            return new SuccessResult(Messages.UserUpdated);
-        }
-        private bool  Exists(int id)
-        {
-            return _userDal.Exists(u => u.Id == id);
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Entities.Concrete;
+﻿using Global.Entities.Concrete;
 using Global.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,8 @@ namespace Business.Abstract
 {
     public interface IUserManager
     {
+        IDataResult<List<OperationClaim>>  GetClaims(User user);
         IResult Add(User user);
-        IResult Delete(User user);
-        IResult Update(User user);
-        IDataResult<List<User>> GetAll();
-        IDataResult<User> GetById(int userId);
+        IDataResult<User> GetByMail(string email);
     }
 }

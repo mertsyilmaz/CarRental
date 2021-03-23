@@ -1,12 +1,13 @@
-﻿using Entities.Concrete;
-using Global.DataAccess;
+﻿using Global.DataAccess;
+using Global.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DataAccess.Abstract
 {
-    public interface IUserDal:IEntityRepository<User>
+    public interface IUserDal : IEntityRepository<User>
     {
+        List<OperationClaim> GetClaims(User user);
     }
 }

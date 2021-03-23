@@ -41,6 +41,9 @@ namespace Business.Constants
 
         //User messages
         public static string UserAdded = "User added successfully.";
+        public static string UserRegistered = "User registered successfully.";
+        public static string PasswordError = "User password wrong!";
+        public static string SuccessfulLogin = "User login successfully.";
         public static string UserUpdated = "User updated successfully.";
         public static string UserDeleted = "User deleted successfully.";
         public static string UserListed = "User listed successfully.";
@@ -65,5 +68,10 @@ namespace Business.Constants
         public static string PhotoListed = "Photo listed successfully.";
         public static string PhotoCountLimit = "Photo count must be a maximum of five.";
         public static string PhotoNotFound = "This photo was not found.";
+
+        // 
+        public static string AuthorizationDenied = "Acccess denied!";
+        public static string AccessTokenCreated = "Acccess token created successfully";
+
     }
 }

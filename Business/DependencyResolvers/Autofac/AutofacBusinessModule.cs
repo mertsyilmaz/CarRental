@@ -6,6 +6,7 @@ using Castle.DynamicProxy;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Global.Utilities.Interceptors;
+using Global.Utilities.Security.JWT;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,6 +37,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<UserManager>().As<IUserManager>().SingleInstance();
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
+
+            builder.RegisterType<AuthManager>().As<IAuthManager>();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
 
             builder.RegisterType<PhotoManager>().As<IPhotoManager>().SingleInstance();
             builder.RegisterType<EfPhotoDal>().As<IPhotoDal>().SingleInstance();
