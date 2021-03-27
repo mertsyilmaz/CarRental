@@ -4,6 +4,7 @@ using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Global.Aspects.Autofac;
+using Global.Aspects.Autofac.Validation;
 using Global.Utilities.Business;
 using Global.Utilities.Results;
 using System;

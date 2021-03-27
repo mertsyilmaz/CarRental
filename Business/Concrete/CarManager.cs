@@ -6,6 +6,10 @@ using Entities.Concrete;
 using Entities.DTOs;
 using FluentValidation;
 using Global.Aspects.Autofac;
+using Global.Aspects.Autofac.Caching;
+using Global.Aspects.Autofac.Performance;
+using Global.Aspects.Autofac.Transaction;
+using Global.Aspects.Autofac.Validation;
 using Global.CrossCuttingConcerns.Validation.FluentValidation;
 using Global.Utilities.Business;
 using Global.Utilities.Results;
@@ -26,6 +30,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarManager.Get")]
         public IResult Add(Car car)
         {
             IResult result = BusinessRules.Run(
@@ -56,6 +61,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDeleted);
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
@@ -96,6 +103,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarManager.Get")]
         public IResult Update(Car car)
         {
             IResult result = BusinessRules.Run(
@@ -127,6 +135,18 @@ namespace Business.Concrete
                 return new SuccessResult();
             }
             return new ErrorResult(Messages.CarNotFound);
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionTest(Car car)
+        {
+            Add(car);
+            if (car.DailyPrice < 2)
+            {
+                throw new Exception("Error");
+            }
+            Add(car);
+            return null;
         }
     }
 }
