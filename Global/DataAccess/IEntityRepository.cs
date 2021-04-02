@@ -13,7 +13,6 @@ namespace Global.DataAccess
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
-
         bool Exists(Expression<Func<T, bool>> filter);
     }
 }
