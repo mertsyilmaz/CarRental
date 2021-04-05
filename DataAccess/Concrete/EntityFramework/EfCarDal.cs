@@ -131,5 +131,29 @@ namespace DataAccess.Concrete.EntityFramework
                 return result.ToList();
             }
         }
+
+        public List<CarDetailDto> GetCarDetailsByFilter(int? colorId, int? brandId)
+        {
+            using (CarRentalContext context = new CarRentalContext())
+            {
+                var result = from cr in context.Cars
+                             join cl in context.Colors
+                             on cr.ColorId equals cl.Id
+                             join br in context.Brands
+                             on cr.BrandId equals br.Id
+                             where (colorId == null ? true : cr.ColorId == colorId)  && (brandId == null ? true : cr.BrandId == brandId)
+                             select new CarDetailDto
+                             {
+                                 CarId = cr.Id,
+                                 BrandName = br.Name,
+                                 CarName = cr.Name,
+                                 ColorName = cl.Name,
+                                 DailyPrice = cr.DailyPrice,
+                                 Description = cr.Description,
+                                 ModelYear = cr.ModelYear
+                             };
+                return result.ToList();
+            }
+        }
     }
 }

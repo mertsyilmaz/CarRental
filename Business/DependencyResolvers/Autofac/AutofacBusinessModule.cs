@@ -44,7 +44,8 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<PhotoManager>().As<IPhotoManager>().SingleInstance();
             builder.RegisterType<EfPhotoDal>().As<IPhotoDal>().SingleInstance();
 
-
+            builder.RegisterType<PaymentManager>().As<IPaymentManager>().SingleInstance();
+            builder.RegisterType<EfPaymentDal>().As<IPaymentDal>().SingleInstance();
 
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();

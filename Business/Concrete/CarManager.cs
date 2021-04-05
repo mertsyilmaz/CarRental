@@ -163,5 +163,10 @@ namespace Business.Concrete
             Add(car);
             return null;
         }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByFilter(int? colorId, int? brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailsByFilter(colorId,brandId), Messages.CarListed);
+        }
     }
 }

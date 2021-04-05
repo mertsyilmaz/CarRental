@@ -23,5 +23,6 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 }

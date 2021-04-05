@@ -27,7 +27,7 @@ namespace Business.Concrete
         public IResult RentCar(Rental rental)
         {
             IResult result = BusinessRules.Run(
-                CarCheckForRent(rental.CarId)
+                CarCheckForRent(rental.CarId,rental.RentDate,rental.ReturnDate)
                 );
 
             if (result != null)
@@ -36,7 +36,7 @@ namespace Business.Concrete
             }
 
             _rentalDal.Add(rental);
-            return new SuccessResult(Messages.CarRented);
+            return new SuccessDataResult<Rental>(rental,Messages.CarRented);
         }
 
         public IResult Delete(Rental rental)
@@ -92,14 +92,14 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(), Messages.RentalListed);
         }
 
-        private IResult CarCheckForRent(int rentalId)
+        private IDataResult<Rental> CarCheckForRent(int carId,DateTime startDate,DateTime endDate)
         {
-            var existRental = _rentalDal.Get(r => r.CarId == rentalId && r.ReturnDate == null);
+            var existRental = _rentalDal.Get(r => r.CarId == carId && r.ReturnDate >= startDate);
             if (existRental != null)
             {
-                return new ErrorResult(Messages.CarNotRent);
+                return new ErrorDataResult<Rental>(Messages.CarNotRent);
             }
-            return new SuccessResult();
+            return new SuccessDataResult<Rental>();
         }
 
         private IResult CarCheckForReturn(int carId)

@@ -46,8 +46,7 @@ namespace ConsoleUI
             {
                 CarId = 1,
                 CustomerId = 1,
-                RentDate = DateTime.Now,
-                ReturnDate = null
+                RentDate = DateTime.Now
             });
             Console.WriteLine(result.Message);
         }

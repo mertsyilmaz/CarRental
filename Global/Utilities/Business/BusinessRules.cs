@@ -18,5 +18,17 @@ namespace Global.Utilities.Business
             }
             return null;
         }
+
+        public static IDataResult<T> RunwithData<T>(params IDataResult<T>[] logics)
+        {
+            foreach (var logic in logics)
+            {
+                if (!logic.Success)
+                {
+                    return logic;
+                }
+            }
+            return null;
+        }
     }
 }

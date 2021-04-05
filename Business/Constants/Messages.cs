@@ -69,9 +69,14 @@ namespace Business.Constants
         public static string PhotoCountLimit = "Photo count must be a maximum of five.";
         public static string PhotoNotFound = "This photo was not found.";
 
+        //Payment messages
+        public static string PaymentAdded = "Payment added successfully.";
+
         // 
         public static string AuthorizationDenied = "Acccess denied!";
         public static string AccessTokenCreated = "Acccess token created successfully";
+
+
 
     }
 }
