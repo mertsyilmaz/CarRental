@@ -11,7 +11,8 @@ namespace Business.ValidationRules.FluentValidation
         public BrandValidator()
         {
             RuleFor(b => b.Name)
-                .NotEmpty().WithMessage("Brand name can not be empty!");
+                .NotEmpty().WithMessage("Brand name can not be empty!")
+                .MinimumLength(3).WithMessage("min 3");
         }
     }
 }
